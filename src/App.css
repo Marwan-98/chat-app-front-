@@ -36,3 +36,21 @@
     transform: rotate(360deg);
   }
 }
+
+
+.form{
+
+  background-color: #d4dada97;
+}
+.button{
+  width: 70%;
+
+}
+.backgr{
+  background-color: #f7f7f70c;
+
+
+}
+.chatPage{
+  width: 50%;
+}
