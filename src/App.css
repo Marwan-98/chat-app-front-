@@ -36,3 +36,46 @@
     transform: rotate(360deg);
   }
 }
+
+
+.form{
+
+  background-color: #d4dada97;
+}
+.button{
+  width: 70%;
+
+}
+.backgr{
+  background-color: #948d8df4;
+
+
+}
+.chatPage{
+  width: 70%;
+  background-color: #e9e9e9;
+}
+
+.message{
+
+  border-radius: 25px;
+  background-position: left top;
+  background-repeat: repeat;
+  padding: 20px; 
+  width: 200px;
+  height: 150px;  
+
+  
+}
+.position{
+
+  position: right;
+}
+#rcorners2 {
+  border-radius: 25px;
+  border: 2px solid #73AD21;
+  padding: 20px; 
+  width: 200px;
+  height: 150px;
+  position: absolute;    
+}

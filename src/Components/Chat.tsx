@@ -11,8 +11,11 @@ import Image from 'react-bootstrap/Image'
 import chatImage from '../Assets/chat.jpg'
 import face from '../Assets/face.jpg'
 
+import Protected from "./Protected"
+
 function Login() {
   return (
+    <Protected>
     <>
     <Navbar style={{backgroundColor: "#F8F5F5"}} fixed="top">
         <Container>
@@ -39,6 +42,7 @@ function Login() {
       </div>
     </Row>
     </>
+    </Protected>
   );
 }
 
