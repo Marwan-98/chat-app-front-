@@ -1,12 +1,17 @@
 import axios from 'axios';
 
 
-export const signUser = async () => {
+export const signUser = async (values: any) => {
 
 
     try {
 
-        await axios.post('loacalhost:2000/user/add').then((response) => {
+        await axios.post('loacalhost:2000/user/add', {
+            firstName: values.firstName,
+            lastName: values.lastName,
+            email: values.email,
+            password: values.password
+        }).then((response) => {
             console.log(response)
         })
 

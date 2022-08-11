@@ -2,27 +2,28 @@ import Form from "react-bootstrap/Form";
 import { Button, Col, Row } from "react-bootstrap";
 import p from "../Assets/image.jpg";
 import Image from "react-bootstrap/Image";
+import {useFormik} from 'formik';
+import {signUser} from "../api/index"
 
-const signUp = () => {
-  const formik = useFormik({
-    initialValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-    },
-    onSubmit: (values) => {
-      console.log("jjjjjjjjjjjjjjjj");
-      const newOrder = {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email,
-        password: values.password,
-      };
+const SignUp = () => {
 
-      formik.resetForm();
-    },
-  });
+
+
+
+
+const formik= useFormik({
+  initialValues: {
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: ''
+  },
+  onSubmit: values => {
+    signUser(values)
+  }
+})
+
+  
 
   return (
     <div className="fluid d-flex ">
@@ -32,26 +33,54 @@ const signUp = () => {
         </Col>
         <Col className="form   text-dark">
           <Form
-            onSubmit={formik.handleSubmit}
+            onSubmit={formik.handleSubmit} 
             className=" button justify-content-center align-items-center m-5 p-5"
           >
-            <Form.Group className="mb-3" controlId="firstname">
+            <Form.Group className="mb-3" controlId="firstName">
               <Form.Label>First Name</Form.Label>
-              <Form.Control type="firstname" />
+              <Form.Control 
+               type="text"
+               name="firstName"
+               id="firstName"
+               value={formik.values.firstName}
+               onChange={formik.handleChange}
+               />
+             
               <Form.Text className="text-muted"></Form.Text>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="lastname">
+            <Form.Group className="mb-3" controlId="lastName">
               <Form.Label>Last Name </Form.Label>
-              <Form.Control type="lastname" />
+              <Form.Control 
+               type="text"
+               name="lastName"
+               id="lastName"
+               value={formik.values.lastName}
+               onChange={formik.handleChange}
+               />
               <Form.Text className="text-muted"></Form.Text>
             </Form.Group>
             <Form.Group className="mb-3" controlId="email">
               <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" />
+              <Form.Control 
+               type="text"
+               name="email"
+               id="email"
+               value={formik.values.email}
+               onChange={formik.handleChange}
+               />
+              
             </Form.Group>
             <Form.Group className="mb-3" controlId="password">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" />
+             
+              <Form.Control 
+               type="text"
+               name="password"
+               id="password"
+               value={formik.values.password}
+               onChange={formik.handleChange}
+               />
+
             </Form.Group>
             <br />
             <Button
@@ -73,16 +102,4 @@ const signUp = () => {
   );
 };
 
-export default signUp;
-function useFormik(arg0: {
-  initialValues: {
-    firstName: string;
-    lastName: string;
-    mobile: number;
-    city: string;
-    address: string;
-  };
-  onSubmit: (values: any) => void;
-}) {
-  throw new Error("Function not implemented.");
-}
+export default SignUp;
