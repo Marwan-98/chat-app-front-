@@ -36,7 +36,7 @@ const formik= useFormik({
             onSubmit={formik.handleSubmit} 
             className=" button justify-content-center align-items-center m-5 p-5"
           >
-            <Form.Group className="mb-3" controlId="firstName">
+            <Form.Group className="mb-3" >
               <Form.Label>First Name</Form.Label>
               <Form.Control 
                type="text"
@@ -48,7 +48,7 @@ const formik= useFormik({
              
               <Form.Text className="text-muted"></Form.Text>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="lastName">
+            <Form.Group className="mb-3" >
               <Form.Label>Last Name </Form.Label>
               <Form.Control 
                type="text"
@@ -59,7 +59,7 @@ const formik= useFormik({
                />
               <Form.Text className="text-muted"></Form.Text>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="email">
+            <Form.Group className="mb-3" >
               <Form.Label>Email address</Form.Label>
               <Form.Control 
                type="text"
@@ -70,7 +70,7 @@ const formik= useFormik({
                />
               
             </Form.Group>
-            <Form.Group className="mb-3" controlId="password">
+            <Form.Group className="mb-3" >
               <Form.Label>Password</Form.Label>
              
               <Form.Control 

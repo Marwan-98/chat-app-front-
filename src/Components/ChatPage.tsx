@@ -9,8 +9,11 @@ import {
 } from "react-bootstrap";
 import bg from "../Assets/bg.jpg";
 
+import Protected from "./Protected"
+
 const ChatPage = () => {
   return (
+    <Protected>
     <div
       className="fluid d-flex
     w-100 m-0 p-0"
@@ -73,6 +76,7 @@ const ChatPage = () => {
         </div>
       </Container>
     </div>
+    </Protected>
   );
 };
 
