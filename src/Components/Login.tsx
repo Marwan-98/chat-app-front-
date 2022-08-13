@@ -1,4 +1,3 @@
-import React from 'react';
 
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
@@ -6,10 +5,11 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { signIn } from "../api/index";
 
 import loginImage from '../Assets/login.jpg'
 
-import { useFormik } from 'formik';
+import {useFormik } from 'formik';
 
 import * as Yup from 'yup';
 
@@ -17,15 +17,16 @@ function Login() {
 
   const formik = useFormik({
     initialValues: {
-      mail: '',
+      email: '',
       password: '',
     },
      validationSchema: Yup.object({
-       mail: Yup.string().required('Email is required'),
+       email: Yup.string().required('Email is required'),
        password: Yup.string().required('Password is required'),
      }),
-    onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async values => {
+      const data = await signIn(values.email, values.password);
+      console.log(data)
     },
   });
 
@@ -46,15 +47,15 @@ function Login() {
         <Form.Label>Email</Form.Label>
         <Form.Control  
         placeholder=""
-        id="mail" 
-        name="mail" 
+        id="email" 
+        name="email" 
         type="text" 
         onChange={formik.handleChange} 
-        value={formik.values.mail}/>
+        value={formik.values.email}/>
       </Form.Group>
 
-       {formik.touched.mail && formik.errors.mail ? (
-         <div>{formik.errors.mail}</div>
+       {formik.touched.email && formik.errors.email ? (
+         <div>{formik.errors.email}</div>
        ) : null}
 
       <Form.Group className="mb-3 text-start">
@@ -77,7 +78,7 @@ function Login() {
       </Button>
       <br/>
       <Form.Text className="text-muted">
-          Don't have an account, <a href="#"> sign up </a>
+          Don't have an account, <a href="/SignUp"> sign up </a>
       </Form.Text>
     </Form> 
     </Col> 

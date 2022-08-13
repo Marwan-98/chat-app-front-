@@ -4,8 +4,7 @@ import {
   Container,
   Form,
   InputGroup,
-  ListGroup,
-  Stack,
+  Navbar,
 } from "react-bootstrap";
 import bg from "../Assets/bg.jpg";
 
@@ -14,6 +13,11 @@ import Protected from "./Protected"
 const ChatPage = () => {
   return (
     <Protected>
+        <Navbar style={{backgroundColor: "#FFFFFF"}} fixed="top">
+        <Container>
+          <h1> Chat</h1>
+        </Container>
+      </Navbar> 
     <div
       className="fluid d-flex
     w-100 m-0 p-0"
@@ -27,7 +31,7 @@ const ChatPage = () => {
         <div className="chatPage mb-4">
         <Card style={{ width: "18rem" }}>
                 <Card.Body>
-                  <Card.Title>Zaynab</Card.Title>
+                  <Card.Title>ali</Card.Title>
                   <Card.Text>Hello World</Card.Text>
                 </Card.Body>
               </Card>
@@ -38,7 +42,7 @@ const ChatPage = () => {
                 style={{ width: "18rem" }}
               >
                 <Card.Body>
-                  <Card.Title>Marwan</Card.Title>
+                  <Card.Title>amr</Card.Title>
                   <Card.Text>
                    Hi every body
                   </Card.Text>
@@ -49,7 +53,7 @@ const ChatPage = () => {
 
               <Card style={{ width: "18rem" }}>
                 <Card.Body>
-                  <Card.Title>Zaynab</Card.Title>
+                  <Card.Title>ahmed</Card.Title>
                   <Card.Text>Hello World</Card.Text>
                 </Card.Body>
               </Card>
@@ -60,7 +64,7 @@ const ChatPage = () => {
                 style={{ width: "18rem" }}
               >
                 <Card.Body>
-                  <Card.Title>Marwan</Card.Title>
+                  <Card.Title>Ezz</Card.Title>
                   <Card.Text>
                     Some quick example text to build on the card title and make
                     up the bulk of the card's content.
