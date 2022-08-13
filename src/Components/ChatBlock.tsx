@@ -9,7 +9,6 @@ const chatBlock = () => {
           <Form className=" p-5 m-5 button justify-content-center align-items-center m-5 p-5">
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Control type="email" placeholder="Zaynab" />
-              <Form.Text className="text-muted">Zaynab </Form.Text>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
