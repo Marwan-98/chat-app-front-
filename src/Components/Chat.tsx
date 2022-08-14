@@ -9,10 +9,18 @@ import Image from "react-bootstrap/Image";
 
 import chatImage from "../Assets/chat.jpg";
 import face from "../Assets/face.jpg";
-
+import type { RootState } from '../redux/store'
+import { useSelector, useDispatch } from 'react-redux'
 import Protected from "./Protected";
 
-function Login() {
+function Chat() {
+
+
+  const users=useSelector((state: RootState) => state.chatApp.user)
+
+  const dispatch =useDispatch();
+
+
   return (
     <Protected>
       <>
@@ -33,7 +41,7 @@ function Login() {
           }}
         >
           <div className="pt-5">
-            {Array.from({ length: 10 }).map(() => (
+            {users.map((user) => (
               <Col className="my-2 ms-5" xs={12}>
                 <div
                   style={{
@@ -52,7 +60,7 @@ function Login() {
                   </Col>
                   <Col className="text-start d-flex justify-content-start align-items-center">
                     <div>
-                      <h5>John Doe</h5>
+                      <h5>{user.firstName}</h5>
                       <p>Good morning</p>
                     </div>
                   </Col>
@@ -66,4 +74,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Chat;

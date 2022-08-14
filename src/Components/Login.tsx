@@ -5,17 +5,19 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { signIn } from "../api/index";
+import { signIn, getAllUsers } from '../api/index';
 
 import loginImage from '../Assets/login.jpg'
-import {useNavigate} from 'react-router'
+import { useNavigate } from 'react-router'
 import { useFormik } from 'formik';
-
+import { useDispatch } from 'react-redux'
 import * as Yup from 'yup';
-
+import { setUser } from '../redux/reducer/chatApp'
 function Login() {
 
 
+
+  const dispatch = useDispatch();
   const navigation = useNavigate();
 
   const formik = useFormik({
@@ -28,9 +30,14 @@ function Login() {
       password: Yup.string().required('Password is required'),
     }),
     onSubmit: async values => {
-      signIn(values.email, values.password).then(()=> {
+      signIn(values.email, values.password).then(() => {
+        getAllUsers().then((response) => {
+          console.log(response)
+          dispatch(setUser(response.data))
+
+        });
         navigation('/chat')
-  
+
       })
 
     },
@@ -80,9 +87,9 @@ function Login() {
             <div>{formik.errors.password}</div>
           ) : null}
 
-          <Button 
+          <Button
 
-          variant="primary" type="submit" className="w-100 mt-5" style={{ backgroundColor: "#464646", borderColor: "#464646" }}>
+            variant="primary" type="submit" className="w-100 mt-5" style={{ backgroundColor: "#464646", borderColor: "#464646" }}>
             Sign in
           </Button>
           <br />

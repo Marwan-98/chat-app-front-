@@ -30,6 +30,16 @@ await axios.post("http://localhost:2000/user/login", { email, password }).then((
 }
 }
 
+export const getAllUsers =  () => {
+
+  return axios.get("http://localhost:2000/user/all")
+
+
+
+}
+
+
+
 
 export const checkLogin = () => {
     return axios.get('http://localhost:2000/user/me', {
