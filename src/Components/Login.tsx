@@ -8,82 +8,91 @@ import Button from 'react-bootstrap/Button';
 import { signIn } from "../api/index";
 
 import loginImage from '../Assets/login.jpg'
-
-import {useFormik } from 'formik';
+import {useNavigate} from 'react-router'
+import { useFormik } from 'formik';
 
 import * as Yup from 'yup';
 
 function Login() {
+
+
+  const navigation = useNavigate();
 
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
-     validationSchema: Yup.object({
-       email: Yup.string().required('Email is required'),
-       password: Yup.string().required('Password is required'),
-     }),
+    validationSchema: Yup.object({
+      email: Yup.string().required('Email is required'),
+      password: Yup.string().required('Password is required'),
+    }),
     onSubmit: async values => {
-      const data = await signIn(values.email, values.password);
-      console.log(data)
+      signIn(values.email, values.password).then(()=> {
+        navigation('/chat')
+  
+      })
+
     },
   });
 
-  return ( <
+
+  return (<
     >
-    <Navbar style={{backgroundColor: "#FFFFFF"}} fixed="top">
-        <Container>
-          <h1>Login</h1>
-        </Container>
-      </Navbar> <
-    Row style = { { minHeight: "100vh"  } } >
-    <Col lg={6} className="d-none d-lg-block" style={{backgroundImage: `url('${loginImage}')`, backgroundSize: "cover"}}>
-    </Col> <
-    Col lg = { 6 } xs = { 12 } style = { { backgroundColor: "#EEEEEE"} } className = "d-flex justify-content-center align-items-center p-0" >
-    <Form className="w-50" onSubmit={formik.handleSubmit}>
+    <Navbar style={{ backgroundColor: "#FFFFFF" }} fixed="top">
+      <Container>
+        <h1>Login</h1>
+      </Container>
+    </Navbar> <
+      Row style={{ minHeight: "100vh" }} >
+      <Col lg={6} className="d-none d-lg-block" style={{ backgroundImage: `url('${loginImage}')`, backgroundSize: "cover" }}>
+      </Col> <
+        Col lg={6} xs={12} style={{ backgroundColor: "#EEEEEE" }} className="d-flex justify-content-center align-items-center p-0" >
+        <Form className="w-50" onSubmit={formik.handleSubmit}>
 
-      <Form.Group className="mb-3 text-start">
-        <Form.Label>Email</Form.Label>
-        <Form.Control  
-        placeholder=""
-        id="email" 
-        name="email" 
-        type="text" 
-        onChange={formik.handleChange} 
-        value={formik.values.email}/>
-      </Form.Group>
+          <Form.Group className="mb-3 text-start">
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              placeholder=""
+              id="email"
+              name="email"
+              type="text"
+              onChange={formik.handleChange}
+              value={formik.values.email} />
+          </Form.Group>
 
-       {formik.touched.email && formik.errors.email ? (
-         <div>{formik.errors.email}</div>
-       ) : null}
+          {formik.touched.email && formik.errors.email ? (
+            <div>{formik.errors.email}</div>
+          ) : null}
 
-      <Form.Group className="mb-3 text-start">
-        <Form.Label >Password</Form.Label>
-        <Form.Control 
-        placeholder=""  
-        id="password" 
-        name="password" 
-        type="text" 
-        onChange={formik.handleChange} 
-        value={formik.values.password}/>
-      </Form.Group>
+          <Form.Group className="mb-3 text-start">
+            <Form.Label >Password</Form.Label>
+            <Form.Control
+              placeholder=""
+              id="password"
+              name="password"
+              type="text"
+              onChange={formik.handleChange}
+              value={formik.values.password} />
+          </Form.Group>
 
- {formik.touched.password && formik.errors.password ? (
-         <div>{formik.errors.password}</div>
-       ) : null}
+          {formik.touched.password && formik.errors.password ? (
+            <div>{formik.errors.password}</div>
+          ) : null}
 
-      <Button variant="primary" type="submit" className="w-100 mt-5" style={{backgroundColor: "#464646", borderColor: "#464646"}}>
-        Sign in
-      </Button>
-      <br/>
-      <Form.Text className="text-muted">
-          Don't have an account, <a href="/SignUp"> sign up </a>
-      </Form.Text>
-    </Form> 
-    </Col> 
-    </Row> 
-    </>
+          <Button 
+
+          variant="primary" type="submit" className="w-100 mt-5" style={{ backgroundColor: "#464646", borderColor: "#464646" }}>
+            Sign in
+          </Button>
+          <br />
+          <Form.Text className="text-muted">
+            Don't have an account, <a href="/SignUp"> sign up </a>
+          </Form.Text>
+        </Form>
+      </Col>
+    </Row>
+  </>
   );
 }
 

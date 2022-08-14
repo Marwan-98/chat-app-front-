@@ -5,8 +5,13 @@ import Image from "react-bootstrap/Image";
 import { useFormik } from "formik";
 import { signUser } from "../api/index";
 import * as Yup from 'yup';
+import { useNavigate } from "react-router";
 
 const SignUp = () => {
+
+
+  const navigation = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -21,7 +26,12 @@ const SignUp = () => {
       password: Yup.string().required('Password is required'),
     }),
     onSubmit: (values) => {
-      signUser(values);
+      signUser(values).then(()=>{
+        navigation('/chat');
+
+
+      })
+
     },
   });
 

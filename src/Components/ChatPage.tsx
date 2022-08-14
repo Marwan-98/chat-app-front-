@@ -21,7 +21,7 @@ const ChatPage = () => {
     <>
     <Navbar style={{ backgroundColor: "#FFFFFF" }}>
         <Container>
-          <Nav.Link to="/chat" as={NavLink}>
+          <Nav.Link href="/chat" as={NavLink}>
             <Image
               className="justify-content-left align-items-left"
               src={ChatList}

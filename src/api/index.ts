@@ -19,11 +19,12 @@ export const signUser = async (values: userInfo) => {
 
 export const signIn = async (email:string, password:string) => {
     try {
-    const response = await axios.post("http://localhost:2000/user/login", { email, password });
-   console.log(response)
-   localStorage.setItem("token", response.data.token);
+await axios.post("http://localhost:2000/user/login", { email, password }).then((response:any)=>{
+        console.log(response.data)
+        localStorage.setItem("token", response.data.data);
+    })
+  
 
-    return response.data;
 } catch (error) {
     console.log(error)
 }
