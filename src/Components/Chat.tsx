@@ -13,13 +13,24 @@ import type { RootState } from '../redux/store'
 import { useSelector, useDispatch } from 'react-redux'
 import Protected from "./Protected";
 
+import { Link } from 'react-router-dom';
+import { useEffect } from "react";
+import { getAllUsers } from "../api";
+import { setUsers } from "../redux/reducer/usersState";
+
 function Chat() {
 
 
-  const users=useSelector((state: RootState) => state.chatApp.user)
+  const user = useSelector((state: RootState) => state.user.user)
 
-  const dispatch =useDispatch();
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    getAllUsers().then((response) => {
+      console.log(response)
+      dispatch(setUsers(response.data));
+    });
+  }, [])
 
   return (
     <Protected>
@@ -41,7 +52,7 @@ function Chat() {
           }}
         >
           <div className="pt-5">
-            {users.map((user) => (
+            {user?.conversations?.map((conversation) => (
               <Col className="my-2 ms-5" xs={12}>
                 <div
                   style={{
@@ -58,12 +69,14 @@ function Chat() {
                       style={{ width: "100px" }}
                     />
                   </Col>
-                  <Col className="text-start d-flex justify-content-start align-items-center">
-                    <div>
-                      <h5>{user.firstName}</h5>
-                      <p>Good morning</p>
-                    </div>
-                  </Col>
+                  <Link to={"/chatPage"} state={ conversation.messages }>
+                    <Col className="text-start d-flex justify-content-start align-items-center">
+                      <div>
+                        <h5>{conversation.users ? conversation.users[0].firstName : "a"}</h5>
+                        <p>{ conversation.messages ? conversation.messages[conversation.messages.length - 1].body : "a"}</p>
+                      </div>
+                    </Col>
+                  </Link>
                 </div>
               </Col>
             ))}

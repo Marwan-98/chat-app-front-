@@ -28,8 +28,6 @@ const SignUp = () => {
     onSubmit: (values) => {
       signUser(values).then(()=>{
         navigation('/chat');
-
-
       })
 
     },
