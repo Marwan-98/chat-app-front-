@@ -1,15 +1,30 @@
+export interface messagesDetails {
+    body: string,
+    date_created: string,
+    date_updated: string,
+    id: number,
+    user: userInfo
+}
+
+export interface message {
+    body: string,
+    user: userInfo
+}
+
+export interface conversation {
+    users?: userInfo[],
+    messages?: message[]
+}
+
 export interface userInfo {
+    data?: string,
     firstName: string
     lastName: string
     email: string
-    password: string
-
+    password: string,
+    conversations?: conversation[]
 }
 export interface userlogin {
-
     email: string
     password: string
-}
-export type AppStateType = {
-    user: userInfo[] | []
 }
