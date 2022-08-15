@@ -53,11 +53,11 @@ w-100 m-0 p-0"
             minHeight: "100vh",
           }}
         >
-          <Container style={{ backgroundColor: "grey" }}>
+          <Container className="chatPage   mb-5 p-5  text-dark" >
             <Row>
               {messages?.map((message: messagesDetails) => {
                 return (
-                  <Col xs={12} className={`d-flex ${message.user.email === user!.email ? "justify-content-end" : "justify-content-start"} text-start my-2`}>
+                  <Col xs={12} className={`d-flex ${message.user.email === localStorage.getItem("email")! ? "justify-content-end" : "justify-content-start"} text-start my-2`}>
                     <div style={{ backgroundColor: "white", width: "300px" }}>
                       <h6>{message.user.firstName}</h6>
                       <p>{message.body}</p>
@@ -66,9 +66,12 @@ w-100 m-0 p-0"
                   </Col>
                 )
               })}
-              <div>
-                <input type="textarea"></input>
-              </div>
+            <div className="input-group mb-0 mt-5">
+  <input type="text" className="form-control"  aria-describedby="basic-addon2"></input>
+  <div className="input-group-append">
+    <button className="btn btn-outline-dark button" type="button">Send</button>
+  </div>
+</div>
             </Row>
           </Container>
         </div>
