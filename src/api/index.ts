@@ -17,26 +17,18 @@ export const signUser = async (values: userInfo) => {
     }
 }
 
-export const signIn = async (email:string, password:string) => {
-    try {
-const response = await axios.post("http://localhost:2000/user/login", { email, password }).then((response:any)=>{
-        console.log(response.data)
-        localStorage.setItem("token", response.data.data);
-        
-    })
-
-    return response;
-} 
-
-    catch (error) {
-    console.log(error)
-}
+export const signIn =  (email:string, password:string) => {
+    console.log(email, password)
+    return axios.post("http://localhost:2000/user/login", { email, password })
 }
 
 export const getAllUsers =  () => {
   return axios.get("http://localhost:2000/user/all")
 }
 
+export const getAllConversations =  (email: string) => {
+    return axios.post("http://localhost:2000/conversation/all", {email});
+  }
 
 
 export const checkLogin = () => {

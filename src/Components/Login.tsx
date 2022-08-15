@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { signIn, getAllUsers } from '../api/index';
+import { signIn} from '../api/index';
 
 import loginImage from '../Assets/login.jpg'
 import { useNavigate } from 'react-router'
@@ -18,7 +18,6 @@ function Login() {
 
 
   const dispatch = useDispatch();
- 
   const navigation = useNavigate();
 
   const formik = useFormik({
@@ -31,12 +30,16 @@ function Login() {
       password: Yup.string().required('Password is required'),
     }),
     onSubmit: async values => {
-      const data = await signIn(values.email, values.password);
-
-      navigation("/chat");
-
+      signIn(values.email, values.password).then((res) => {
+        localStorage.setItem("email", values.email);
+        localStorage.setItem("token", res.data.data);
+        dispatch(setUser(res.data.user));
+      }).then(() => {
+        navigation('/chat')
+      })
     },
   });
+
 
   return (<
     >
