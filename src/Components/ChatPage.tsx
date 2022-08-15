@@ -53,7 +53,7 @@ w-100 m-0 p-0"
             minHeight: "100vh",
           }}
         >
-          <Container style={{ backgroundColor: "grey" }}>
+          <Container className="chatPage   mb-5 p-5  text-dark" >
             <Row>
               {messages?.map((message: messagesDetails) => {
                 return (

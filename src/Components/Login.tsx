@@ -5,14 +5,13 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { signIn, getAllUsers } from '../api/index';
+import { signIn} from '../api/index';
 
 import loginImage from '../Assets/login.jpg'
 import { useNavigate } from 'react-router'
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux'
 import * as Yup from 'yup';
-import { setUsers } from '../redux/reducer/usersState'
 import { setUser } from '../redux/reducer/userState'
 function Login() {
 
