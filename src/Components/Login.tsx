@@ -12,13 +12,13 @@ import { useNavigate } from 'react-router'
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux'
 import * as Yup from 'yup';
-import { setUsers } from '../redux/reducer/usersState'
 import { setUser } from '../redux/reducer/userState'
 function Login() {
 
 
 
   const dispatch = useDispatch();
+ 
   const navigation = useNavigate();
 
   const formik = useFormik({
@@ -31,13 +31,12 @@ function Login() {
       password: Yup.string().required('Password is required'),
     }),
     onSubmit: async values => {
-      signIn(values.email, values.password).then((res) => {
-        dispatch(setUser(res.data.user));
-        navigation('/chat')
-      })
+      const data = await signIn(values.email, values.password);
+
+      navigation("/chat");
+
     },
   });
-
 
   return (<
     >
