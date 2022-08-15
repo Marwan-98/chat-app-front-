@@ -32,7 +32,10 @@ function Login() {
     }),
     onSubmit: async values => {
       signIn(values.email, values.password).then((res) => {
+        localStorage.setItem("email", values.email);
+        localStorage.setItem("token", res.data.data);
         dispatch(setUser(res.data.user));
+      }).then(() => {
         navigation('/chat')
       })
     },

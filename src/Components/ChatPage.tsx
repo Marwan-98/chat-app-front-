@@ -57,7 +57,7 @@ w-100 m-0 p-0"
             <Row>
               {messages?.map((message: messagesDetails) => {
                 return (
-                  <Col xs={12} className={`d-flex ${message.user.email === user!.email ? "justify-content-end" : "justify-content-start"} text-start my-2`}>
+                  <Col xs={12} className={`d-flex ${message.user.email === localStorage.getItem("email")! ? "justify-content-end" : "justify-content-start"} text-start my-2`}>
                     <div style={{ backgroundColor: "white", width: "300px" }}>
                       <h6>{message.user.firstName}</h6>
                       <p>{message.body}</p>

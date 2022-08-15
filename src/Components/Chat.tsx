@@ -15,20 +15,25 @@ import Protected from "./Protected";
 
 import { Link } from 'react-router-dom';
 import { useEffect } from "react";
-import { getAllUsers } from "../api";
+import { getAllConversations, getAllUsers } from "../api";
 import { setUsers } from "../redux/reducer/usersState";
+import { setConversations } from "../redux/reducer/conversationsState";
+import io from 'socket.io-client';
 
 function Chat() {
 
 
-  const user = useSelector((state: RootState) => state.user.user)
+  const user = useSelector((state: RootState) => state.user.user);
+
+  const conversations = useSelector((state: RootState) => state.conversations.conversations);
 
   const dispatch = useDispatch();
 
+  console.log(conversations);
+
   useEffect(() => {
-    getAllUsers().then((response) => {
-      console.log(response)
-      dispatch(setUsers(response.data));
+    getAllConversations(localStorage.getItem("email")!).then((response) => {
+      dispatch(setConversations(response.data));
     });
   }, [])
 
@@ -52,7 +57,7 @@ function Chat() {
           }}
         >
           <div className="pt-5">
-            {user?.conversations?.map((conversation) => (
+            {conversations?.map((conversation) => (
               <Col className="my-2 ms-5" xs={12}>
                 <div
                   style={{

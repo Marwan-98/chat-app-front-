@@ -26,6 +26,9 @@ export const getAllUsers =  () => {
   return axios.get("http://localhost:2000/user/all")
 }
 
+export const getAllConversations =  (email: string) => {
+    return axios.post("http://localhost:2000/conversation/all", {email});
+  }
 
 
 export const checkLogin = () => {
