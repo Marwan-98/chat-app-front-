@@ -10,7 +10,6 @@ const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 	useEffect(() => {
 			checkLogin().then((res) => {
-			 console.log(res.status)
 			}).catch((err) => {
 				if(err) {
 					navigate("/signUp");

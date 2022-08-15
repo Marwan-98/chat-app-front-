@@ -16,26 +16,29 @@ import Protected from "./Protected";
 import { Link } from 'react-router-dom';
 import { useEffect } from "react";
 import { getAllConversations, getAllUsers } from "../api";
-import { setUsers } from "../redux/reducer/usersState";
 import { setConversations } from "../redux/reducer/conversationsState";
-import io from 'socket.io-client';
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:2000/");
+
+socket.on("connect", () => {
+  console.log("connected");
+});
 
 function Chat() {
-
-
-  const user = useSelector((state: RootState) => state.user.user);
-
   const conversations = useSelector((state: RootState) => state.conversations.conversations);
 
   const dispatch = useDispatch();
-
-  console.log(conversations);
 
   useEffect(() => {
     getAllConversations(localStorage.getItem("email")!).then((response) => {
       dispatch(setConversations(response.data));
     });
   }, [])
+
+  const sendMessage = () => {
+    // socket.emit()
+  }
 
   return (
     <Protected>
@@ -57,32 +60,33 @@ function Chat() {
           }}
         >
           <div className="pt-5">
-            {conversations?.map((conversation) => (
-              <Col className="my-2 ms-5" xs={12}>
-                <div
-                  style={{
-                    backgroundColor: "#EEEEEE",
-                    width: "300px",
-                    cursor: "pointer",
-                  }}
-                  className="d-flex justify-content-center align-items-center p-2"
-                >
-                  <Col className=" d-flex  justify-content-center align-items-center">
-                    <Image
-                      src={face}
-                      roundedCircle={true}
-                      style={{ width: "100px" }}
-                    />
-                  </Col>
-                  <Link to={"/chatPage"} state={ conversation.messages }>
+            {conversations.map((conversation) => (
+              <Col className="my-2 ms-5" xs={12} key={conversation.id}>
+                  <div
+                    style={{
+                      backgroundColor: "#EEEEEE",
+                      width: "300px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <Link to={"/chatPage"} state={conversation.messages}>
+                    <div className="d-flex justify-content-center align-items-center p-2">
+                    <Col className=" d-flex  justify-content-center align-items-center">
+                      <Image
+                        src={face}
+                        roundedCircle={true}
+                        style={{ width: "100px" }}
+                      />
+                    </Col>
                     <Col className="text-start d-flex justify-content-start align-items-center">
                       <div>
-                        <h5>{conversation.users ? conversation.users[0].firstName : "a"}</h5>
-                        <p>{ conversation.messages ? conversation.messages[conversation.messages.length - 1].body : "a"}</p>
+                        <h5>{conversation.users[0].firstName}</h5>
+                        <p>{conversation.messages ? conversation.messages[conversation.messages.length - 1].body : ""}</p>
                       </div>
                     </Col>
-                  </Link>
-                </div>
+                    </div>
+                </Link>
+                  </div>
               </Col>
             ))}
           </div>

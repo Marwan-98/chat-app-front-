@@ -7,13 +7,15 @@ export interface messagesDetails {
 }
 
 export interface message {
+    id: number,
     body: string,
     user: userInfo
 }
 
 export interface conversation {
-    users?: userInfo[],
-    messages?: message[]
+    id: number,
+    users: userInfo[],
+    messages: message[]
 }
 
 export interface userInfo {

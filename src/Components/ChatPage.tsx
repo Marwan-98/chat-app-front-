@@ -57,7 +57,7 @@ w-100 m-0 p-0"
             <Row>
               {messages?.map((message: messagesDetails) => {
                 return (
-                  <Col xs={12} className={`d-flex ${message.user.email === localStorage.getItem("email")! ? "justify-content-end" : "justify-content-start"} text-start my-2`}>
+                  <Col xs={12} className={`d-flex ${message.user.email === localStorage.getItem("email")! ? "justify-content-end" : "justify-content-start"} text-start my-2`} key={message.id}>
                     <div style={{ backgroundColor: "white", width: "300px" }}>
                       <h6>{message.user.firstName}</h6>
                       <p>{message.body}</p>
@@ -66,9 +66,24 @@ w-100 m-0 p-0"
                   </Col>
                 )
               })}
-              <div>
-                <input type="textarea"></input>
-              </div>
+            </Row>
+            <Row fixed="bottom">
+              <Col>
+                <Form>
+                  <Row>
+                    <Col xs={8} sm={10} lg={11}>
+                      <Form.Group className="mb-3">
+                        <Form.Control type="text" placeholder="Write A Message..." />
+                      </Form.Group>
+                    </Col>
+                    <Col xs={4} sm={2} lg={1}>
+                      <Button variant="dark" type="submit">
+                        Send
+                      </Button>
+                    </Col>
+                  </Row>
+                </Form>
+              </Col>
             </Row>
           </Container>
         </div>
