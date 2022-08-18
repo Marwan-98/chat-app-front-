@@ -6,19 +6,28 @@ export interface messagesDetails {
     user: userInfo
 }
 
+
 export interface message {
-    id: number,
+    id?: number,
     body: string,
+    date_created?: string,
     user: userInfo
 }
 
+export interface chatMessage {
+    body: string,
+    userID: number
+    conversationID?: string
+}
+
 export interface conversation {
-    id: number,
     users: userInfo[],
     messages: message[]
+    id: string,
 }
 
 export interface userInfo {
+    id: number
     data?: string,
     firstName: string
     lastName: string
@@ -26,6 +35,16 @@ export interface userInfo {
     password: string,
     conversations?: conversation[]
 }
+
+export interface userSign {
+    data?: string,
+    firstName: string
+    lastName: string
+    email: string
+    password: string,
+    conversations?: conversation[]
+}
+
 export interface userlogin {
     email: string
     password: string
