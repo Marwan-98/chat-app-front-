@@ -5,17 +5,15 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { signIn} from '../api/index';
+import { signIn } from '../api/index';
 
 import loginImage from '../Assets/login.jpg'
 import { useNavigate } from 'react-router'
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux'
 import * as Yup from 'yup';
-import { setUser } from '../redux/reducer/userState'
+
 function Login() {
-
-
 
   const dispatch = useDispatch();
   const navigation = useNavigate();
@@ -30,11 +28,7 @@ function Login() {
       password: Yup.string().required('Password is required'),
     }),
     onSubmit: async values => {
-      signIn(values.email, values.password).then((res) => {
-        localStorage.setItem("email", values.email);
-        localStorage.setItem("token", res.data.data);
-        dispatch(setUser(res.data.user));
-      }).then(() => {
+      signIn(values.email, values.password, dispatch).then(() => {
         navigation('/chat')
       })
     },

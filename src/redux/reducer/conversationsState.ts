@@ -7,7 +7,7 @@ interface conversationState {
     messages: message[] | []
 }
 const initialState: conversationState = {
-    conversations: [],
+    conversations: JSON.parse(localStorage.getItem("conversations")!),
     messages: []
 }
 export const conversationsSlice = createSlice({

@@ -1,39 +1,33 @@
 import {
   Button,
-  Card,
   Container,
   Form,
-  InputGroup,
-  Navbar,
-  Nav,
-  NavLink,
   Col,
   Row,
 } from "react-bootstrap";
 import bg from "../Assets/bg.jpg";
-import ChatList from "../Assets/ChatList.svg";
-import Image from "react-bootstrap/Image";
 import Protected from "./Protected";
-import { useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { chatMessage, messagesDetails } from "../types";
-import { message } from "../types"
+import { chatMessage } from "../types";
 import { useEffect, useState } from "react";
 
 import { Socket } from "socket.io-client";
-import { checkLogin, getAllMessages, saveMessage } from "../api";
+import { getAllMessages, saveMessage } from "../api";
 import { useParams } from "react-router";
+import AppNav from "./Chat/AppNav";
+import ChatBlock from "./ChatPage/ChatBlock";
 import { setMessages } from "../redux/reducer/conversationsState";
 
 const ChatPage = ({ socket }: { socket: Socket }) => {
 
   const [message, setMessage] = useState("")
-  const [ref, setRef] = useState(0)
 
   const user = useSelector((state: RootState) => state.user.user);
   const conversations = useSelector((state: RootState) => state.conversations.conversations);
   const allMessages = useSelector((state: RootState) => state.conversations.messages);
+
+  console.log(conversations);
 
   const dispatch = useDispatch();
 
@@ -44,25 +38,40 @@ const ChatPage = ({ socket }: { socket: Socket }) => {
       id,
       ...message
     }
-    await saveMessage({userID: data.userID, body: data.body, conversationID: data.id}).then((res) => {
+    await saveMessage({ userID: data.userID, body: data.body, conversationID: data.id }, dispatch).then((res) => {
       dispatch(setMessages(res.data.messages));
     })
-   await socket.emit("send_message", data);
+    for(let i = 0; i < conversations.length; i++) {
+      if(conversations[i].id == data.id) {
+        if(conversations[i].users.length > 2) {
+          console.log(conversations[i].users.length)
+          await socket.emit("send_group_message", data);
+        } else {
+          await socket.emit("send_message", data);
+        }
+      }
+    }
   }
 
   useEffect(() => {
     socket.on("recieve_message", (data) => {
-      getAllMessages(+id!).then((res) => {
+      getAllMessages(+id!, dispatch).then((res) => {
+        dispatch(setMessages(res.data))
+      })
+    });
+    socket.on("recieve_group_message", (data) => {
+      getAllMessages(+id!, dispatch).then((res) => {
+        console.log(res.data)
         dispatch(setMessages(res.data))
       })
     });
   }, [socket])
 
   const joinConversation = (conversation_id: string) => {
-    for(let i = 0; i < conversations.length; i++) {
-      if(conversations[i].id == id!) {
+    for (let i = 0; i < conversations.length; i++) {
+      if (conversations[i].id == id!) {
         const _user = conversations[i].users.find(_user => _user.id === user!.id)
-        if(_user) {
+        if (_user) {
           socket.emit("join_conversation", (conversation_id).toString())
         }
       }
@@ -71,7 +80,7 @@ const ChatPage = ({ socket }: { socket: Socket }) => {
 
   useEffect(() => {
     joinConversation(id!);
-    getAllMessages(+id!).then((res) => {
+    getAllMessages(+id!, dispatch).then((res) => {
       dispatch(setMessages(res.data))
     })
   }, [])
@@ -79,18 +88,7 @@ const ChatPage = ({ socket }: { socket: Socket }) => {
   return (
     <Protected>
       <>
-        <Navbar style={{ backgroundColor: "#FFFFFF" }}>
-          <Container>
-            <Nav.Link href="/chat" as={NavLink}>
-              <Image
-                className="justify-content-left align-items-left"
-                src={ChatList}
-                style={{ width: 35, height: 35 }}
-              ></Image>
-              <span className="fw-border fs-4  m-1 p-1"> Chat </span>
-            </Nav.Link>{" "}
-          </Container>
-        </Navbar>
+        <AppNav text="Chat" />
         <div
           style={{
             backgroundImage: `url(${bg})`,
@@ -98,18 +96,10 @@ const ChatPage = ({ socket }: { socket: Socket }) => {
             minHeight: "100vh",
           }}
         >
-          <Container className="chatPage text-dark" >
+          <Container className="chatPage text-dark mt-5 pt-5">
             <Row>
               {allMessages.map((message) => {
-                return (
-                  <Col xs={12} className={`d-flex ${message.user.email === localStorage.getItem("email")! ? "justify-content-end" : "justify-content-start"} text-start my-2`} key={message.id}>
-                    <div style={{ backgroundColor: "white", width: "300px" }}>
-                      <h6>{message.user.firstName}</h6>
-                      <p>{message.body}</p>
-                      <p>{message.date_created}</p>
-                    </div>
-                  </Col>
-                )
+                return (<ChatBlock message={message} />)
               })}
             </Row>
             <Row className="w-100">
