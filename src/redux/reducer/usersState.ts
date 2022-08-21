@@ -8,7 +8,7 @@ interface usersState {
 
 
 const initialState: usersState = {
-    users: [],
+    users: JSON.parse(localStorage.getItem("users")!) || []
 }
 
 

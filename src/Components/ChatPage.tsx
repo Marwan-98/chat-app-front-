@@ -10,7 +10,7 @@ import Protected from "./Protected";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { chatMessage } from "../types";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Socket } from "socket.io-client";
 import { getAllMessages, saveMessage } from "../api";
@@ -26,12 +26,12 @@ const ChatPage = ({ socket }: { socket: Socket }) => {
   const user = useSelector((state: RootState) => state.user.user);
   const conversations = useSelector((state: RootState) => state.conversations.conversations);
   const allMessages = useSelector((state: RootState) => state.conversations.messages);
-
-  console.log(conversations);
-
+  
   const dispatch = useDispatch();
 
   const { id } = useParams();
+
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   const sendMessage = async (message: chatMessage) => {
     const data = {
@@ -40,11 +40,12 @@ const ChatPage = ({ socket }: { socket: Socket }) => {
     }
     await saveMessage({ userID: data.userID, body: data.body, conversationID: data.id }, dispatch).then((res) => {
       dispatch(setMessages(res.data.messages));
+    }).catch(err => {
+      window.location.href = "/login";
     })
     for(let i = 0; i < conversations.length; i++) {
       if(conversations[i].id == data.id) {
         if(conversations[i].users.length > 2) {
-          console.log(conversations[i].users.length)
           await socket.emit("send_group_message", data);
         } else {
           await socket.emit("send_message", data);
@@ -54,12 +55,12 @@ const ChatPage = ({ socket }: { socket: Socket }) => {
   }
 
   useEffect(() => {
-    socket.on("recieve_message", (data) => {
+    socket.on("recieve_message", () => {
       getAllMessages(+id!, dispatch).then((res) => {
         dispatch(setMessages(res.data))
       })
     });
-    socket.on("recieve_group_message", (data) => {
+    socket.on("recieve_group_message", () => {
       getAllMessages(+id!, dispatch).then((res) => {
         console.log(res.data)
         dispatch(setMessages(res.data))
@@ -85,22 +86,28 @@ const ChatPage = ({ socket }: { socket: Socket }) => {
     })
   }, [])
 
+  
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({behavior: 'smooth'});
+  }, [allMessages]);
+
   return (
     <Protected>
       <>
-        <AppNav text="Chat" />
+        <AppNav/>
         <div
           style={{
             backgroundImage: `url(${bg})`,
             backgroundSize: "cover",
-            minHeight: "100vh",
+            minHeight: "calc(100vh - 48px)",
           }}
         >
-          <Container className="chatPage text-dark mt-5 pt-5">
-            <Row>
+          <Container className="chatPage text-dark mt-5" >
+            <Row style={{minHeight: "calc(100vh - 102px)", maxHeight: "calc(100vh - 102px)", overflowY: "scroll"}} className="pt-5">
               {allMessages.map((message) => {
-                return (<ChatBlock message={message} />)
+                return (<ChatBlock message={message} key={message.id}/>)
               })}
+            <div ref={bottomRef}/>
             </Row>
             <Row className="w-100">
               <Col>

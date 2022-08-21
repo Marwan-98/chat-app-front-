@@ -21,6 +21,7 @@ export interface chatMessage {
 }
 
 export interface conversation {
+    title: string
     users: userInfo[],
     messages: message[]
     id: string,

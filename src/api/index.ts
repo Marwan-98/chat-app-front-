@@ -12,7 +12,7 @@ export const signUser = async (values: userSign) => {
             lastName: values.lastName,
             email: values.email,
             password: values.password
-        }).then((response: any) => {
+        }).then((response) => {
             localStorage.setItem("user", JSON.stringify(response.data.newUser));
             localStorage.setItem("token", response.data.token);
         })
@@ -31,19 +31,43 @@ export const signIn = (email: string, password: string, dispatch: Dispatch) => {
 }
 
 export const getAllUsers = (dispatch: Dispatch) => {
-    axios.get("http://localhost:2000/user/all").then((res) => {
+    axios.get("http://localhost:2000/users/all", {
+        headers: {
+            auth: localStorage.getItem("token")!
+        }}).then((res) => {
+        localStorage.setItem("users", JSON.stringify(res.data));
         dispatch(setUsers(res.data))
       })
 }
 
 export const getAllConversations = (email: string, dispatch: Dispatch) => {
-    axios.post("http://localhost:2000/conversation/all", { email }).then((response) => {
-        dispatch(setConversations(response.data));
-      })
+    try {
+        axios.post("http://localhost:2000/conversation/all", { email }, {
+            headers: {
+                auth: localStorage.getItem("token")!
+            }
+        }).then((response) => {
+            dispatch(setConversations(response.data));
+        })
+    } catch (err) {
+        console.log("found error")
+    }
 }
 
 export const newCoversation = (userId: number, senderId: number) => {
-    return axios.post("http://localhost:2000/conversation/newConv", { userId, senderId });
+    return axios.post("http://localhost:2000/conversation/newConv", { userId, senderId }, {
+        headers: {
+            auth: localStorage.getItem("token")!
+        }
+    });
+}
+
+export const newGroup = (title: string, users: number[], senderId: number) => {
+    return axios.post("http://localhost:2000/conversation/group", { title, users, senderId }, {
+        headers: {
+            auth: localStorage.getItem("token")!
+        }
+    });
 }
 
 export const checkLogin = () => {
@@ -55,9 +79,17 @@ export const checkLogin = () => {
 }
 
 export const getAllMessages = (id: number, dispatch: Dispatch) => {
-    return axios.get(`http://localhost:2000/conversation/${id}`)
+    return axios.get(`http://localhost:2000/conversation/${id}`, {
+        headers: {
+            auth: localStorage.getItem("token")!
+        }
+    })
 }
 
 export const saveMessage = (message: chatMessage, dispatch: Dispatch) => {
-    return axios.post("http://localhost:2000/message/new", { body: message.body, userID: message.userID, conversationID: message.conversationID })
+    return axios.post("http://localhost:2000/message/new", { body: message.body, userID: message.userID, conversationID: message.conversationID }, {
+        headers: {
+            auth: localStorage.getItem("token")!
+        }
+    })
 }

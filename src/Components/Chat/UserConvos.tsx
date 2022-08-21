@@ -30,7 +30,7 @@ function UserConvos() {
                             </Col>
                             <Col className="text-start d-flex justify-content-start align-items-center">
                                 <div>
-                                    <h5>{conversation.users.length <= 2 ? conversation.users.find(user => user.firstName !== meUser?.firstName)!.firstName : "Group Chat"}</h5>
+                                    <h5>{conversation.title ? conversation.title : conversation.users.find(user => user.firstName !== meUser?.firstName)!.firstName}</h5>
                                     <p>{conversation.messages[0] ? conversation.messages[conversation.messages.length - 1].body : ""}</p>
                                 </div>
                             </Col>
