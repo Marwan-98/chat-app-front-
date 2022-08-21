@@ -20,8 +20,11 @@ export const conversationsSlice = createSlice({
         setMessages: (state, action: PayloadAction<message[]>) => {
             state.messages = action.payload
         },
+        addMessage: (state, action: PayloadAction<message>) => {
+            state.messages = [...state.messages, action.payload];
+        }
     },
 })
 
-export const { setConversations, setMessages } = conversationsSlice.actions;
+export const { setConversations, setMessages, addMessage } = conversationsSlice.actions;
 export default conversationsSlice.reducer;

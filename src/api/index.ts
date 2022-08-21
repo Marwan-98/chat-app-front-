@@ -50,7 +50,7 @@ export const getAllConversations = (email: string, dispatch: Dispatch) => {
             dispatch(setConversations(response.data));
         })
     } catch (err) {
-        console.log("found error")
+        console.log(err)
     }
 }
 

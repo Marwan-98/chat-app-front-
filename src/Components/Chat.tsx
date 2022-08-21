@@ -17,7 +17,7 @@ function Chat({ socket }: { socket: Socket }) {
 
   const [loading, setLoading] = useState(false);
 
-  socket.on("connect", () => {
+  socket?.on("connect", () => {
     console.log("connected");
   });
 

@@ -9,7 +9,7 @@ import bg from "../Assets/bg.jpg";
 import Protected from "./Protected";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { chatMessage } from "../types";
+import { chatMessage, message } from "../types";
 import { useEffect, useRef, useState } from "react";
 
 import { Socket } from "socket.io-client";
@@ -17,7 +17,7 @@ import { getAllMessages, saveMessage } from "../api";
 import { useParams } from "react-router";
 import AppNav from "./Chat/AppNav";
 import ChatBlock from "./ChatPage/ChatBlock";
-import { setMessages } from "../redux/reducer/conversationsState";
+import { addMessage, setMessages } from "../redux/reducer/conversationsState";
 
 const ChatPage = ({ socket }: { socket: Socket }) => {
 
@@ -33,40 +33,36 @@ const ChatPage = ({ socket }: { socket: Socket }) => {
 
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  const sendMessage = async (message: chatMessage) => {
+  const sendMessage = (message: message) => {
     const data = {
       id,
-      ...message
-    }
-    await saveMessage({ userID: data.userID, body: data.body, conversationID: data.id }, dispatch).then((res) => {
-      dispatch(setMessages(res.data.messages));
-    }).catch(err => {
-      window.location.href = "/login";
-    })
-    for(let i = 0; i < conversations.length; i++) {
-      if(conversations[i].id == data.id) {
-        if(conversations[i].users.length > 2) {
-          await socket.emit("send_group_message", data);
-        } else {
-          await socket.emit("send_message", data);
-        }
+      message: {
+        ...message
       }
     }
+    saveMessage({ userID: data.message.user.id, body: data.message.body, conversationID: data.id }, dispatch).catch(err => {
+      window.location.href = "/login";
+    })
+    socket.emit("send_message", {id: data.id, message: data.message});
+    // for(let i = 0; i < conversations.length; i++) {
+    //   if(conversations[i].id == data.id) {
+    //     if(conversations[i].users.length > 2) {
+    //       socket.emit("send_group_message", {id: data.id, message: data.message});
+    //     } else {
+    //     }
+    //   }
+    // }
   }
 
   useEffect(() => {
-    socket.on("recieve_message", () => {
-      getAllMessages(+id!, dispatch).then((res) => {
-        dispatch(setMessages(res.data))
-      })
+    socket?.on("recieve_message", (data) => {
+      console.log("useEffect")
+        dispatch(addMessage(data))
     });
-    socket.on("recieve_group_message", () => {
-      getAllMessages(+id!, dispatch).then((res) => {
-        console.log(res.data)
-        dispatch(setMessages(res.data))
-      })
-    });
-  }, [socket])
+    // socket.on("recieve_group_message", (data) => {
+    //   dispatch(addMessage(data))
+    // });
+  }, [])
 
   const joinConversation = (conversation_id: string) => {
     for (let i = 0; i < conversations.length; i++) {
@@ -119,7 +115,7 @@ const ChatPage = ({ socket }: { socket: Socket }) => {
                       </Form.Group>
                     </Col>
                     <Col xs={4} sm={2} lg={1}>
-                      <Button variant="dark" onClick={() => sendMessage({ body: message, userID: user!.id })}>
+                      <Button variant="dark" onClick={() => sendMessage({ id: Math.random(), body: message, date_created: new Date().toISOString() , user: user! })}>
                         Send
                       </Button>
                     </Col>

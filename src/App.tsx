@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 
@@ -7,18 +7,22 @@ import Login from "./Components/Login";
 import Chat from "./Components/Chat";
 import ChatPage from './Components/ChatPage';
 
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 
-const socket = io("http://localhost:2000/");
 
 function App() {
+  const [socket, setSocket] = useState<Socket>();
+
+  useEffect(() => {
+    setSocket(io("http://localhost:2000/"))
+  }, [])
   return (
     <div className="App container-fluid">
     <Routes>
       <Route path="/signUp" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/chat" element={<Chat socket={socket}/>} />
-      <Route path="/chatPage/:id" element={<ChatPage socket={socket}/>} />
+      <Route path="/chat" element={<Chat socket={socket!}/>} />
+      <Route path="/chatPage/:id" element={<ChatPage socket={socket!}/>} />
     </Routes>
     </div>
   );
