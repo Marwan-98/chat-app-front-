@@ -44,26 +44,9 @@ const ChatPage = ({ socket }: { socket: Socket }) => {
       window.location.href = "/login";
     })
     socket.emit("send_message", {id: data.id, message: data.message});
-    // for(let i = 0; i < conversations.length; i++) {
-    //   if(conversations[i].id == data.id) {
-    //     if(conversations[i].users.length > 2) {
-    //       socket.emit("send_group_message", {id: data.id, message: data.message});
-    //     } else {
-    //     }
-    //   }
-    // }
   }
 
-  useEffect(() => {
-    socket?.on("recieve_message", (data) => {
-      console.log("useEffect")
-        dispatch(addMessage(data))
-    });
-    // socket.on("recieve_group_message", (data) => {
-    //   dispatch(addMessage(data))
-    // });
-  }, [])
-
+  
   const joinConversation = (conversation_id: string) => {
     for (let i = 0; i < conversations.length; i++) {
       if (conversations[i].id == id!) {
@@ -74,14 +57,19 @@ const ChatPage = ({ socket }: { socket: Socket }) => {
       }
     }
   }
-
+  
   useEffect(() => {
     joinConversation(id!);
     getAllMessages(+id!, dispatch).then((res) => {
       dispatch(setMessages(res.data))
     })
+    socket.on("recieve_message", (data) => {
+        dispatch(addMessage(data))
+    });
+    return () => {
+      socket.off("recieve_message")
+    }
   }, [])
-
   
   useEffect(() => {
     bottomRef.current?.scrollIntoView({behavior: 'smooth'});
@@ -115,7 +103,7 @@ const ChatPage = ({ socket }: { socket: Socket }) => {
                       </Form.Group>
                     </Col>
                     <Col xs={4} sm={2} lg={1}>
-                      <Button variant="dark" onClick={() => sendMessage({ id: Math.random(), body: message, date_created: new Date().toISOString() , user: user! })}>
+                      <Button variant="dark" onClick={message !== "" ? () => sendMessage({ id: Math.random(), body: message, date_created: new Date().toISOString() , user: user! }) : undefined}>
                         Send
                       </Button>
                     </Col>
