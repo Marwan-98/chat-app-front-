@@ -37,22 +37,19 @@ function Chat({ socket }: { socket: Socket }) {
         <Spinner animation="border" role="status"/>
         </div>
       </div>
-      <div className="pt-5"
+      <div
         style={{
           minHeight: "100vh",
           maxHeight: "100vh",
           overflowY: "scroll",
           overflowX: "hidden",
-          backgroundImage: `url('${chatImage}')`,
           backgroundSize: "cover",
         }}>
         <AppNav />
-        <Container className="mt-5">
-          <Row className="mt-5">
-            <UserConvos />
+          <Row>
             <Users setLoading={setLoading}/>
+            <UserConvos />
           </Row>
-        </Container>
       </div>
     </Protected>
   );

@@ -15,6 +15,7 @@ export const signUser = async (values: userSign) => {
         }).then((response) => {
             localStorage.setItem("user", JSON.stringify(response.data.newUser));
             localStorage.setItem("token", response.data.token);
+            localStorage.setItem("conversations", JSON.stringify(response.data.user.conversations));
         })
     } catch (error) {
         console.log(error)

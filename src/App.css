@@ -28,6 +28,24 @@
   color: #61dafb;
 }
 
+.users-block {
+  flex-direction: row;
+  align-content: flex-start;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.users-block .user {
+  min-width: 100px;
+}
+
+.convos-block {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -119,4 +137,21 @@
 
 .left-msg .msg-bubble {
   border-bottom-left-radius: 0;
+}
+
+@media (max-width: 991px) {
+  .users-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 150px;
+    max-height: 150px;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    padding-top: 60px;
+  }
+  .convos-block {
+    padding-top: 0;
+  }
 }

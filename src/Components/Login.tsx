@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { getAllUsers, signIn } from '../api/index';
+import { getAllConversations, getAllUsers, signIn } from '../api/index';
 
 import loginImage from '../Assets/login.jpg'
 import { useNavigate } from 'react-router'
@@ -30,6 +30,7 @@ function Login() {
     onSubmit: async values => {
       signIn(values.email, values.password, dispatch).then(async () => {
         await getAllUsers(dispatch)
+        await getAllConversations(values.email, dispatch)
         navigation('/chat')
       })
     },

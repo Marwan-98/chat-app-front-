@@ -68,6 +68,7 @@ const ChatPage = ({ socket }: { socket: Socket }) => {
     });
     return () => {
       socket.off("recieve_message")
+      dispatch(setMessages([]))
     }
   }, [])
   
@@ -81,13 +82,14 @@ const ChatPage = ({ socket }: { socket: Socket }) => {
         <AppNav/>
         <div
           style={{
-            backgroundImage: `url(${bg})`,
             backgroundSize: "cover",
             minHeight: "calc(100vh - 48px)",
           }}
         >
-          <Container className="chatPage text-dark mt-5" >
-            <Row style={{minHeight: "calc(100vh - 102px)", maxHeight: "calc(100vh - 102px)", overflowY: "scroll"}} className="pt-5">
+            <Row style={{minHeight: "calc(100vh - 102px)", 
+            maxHeight: "calc(100vh - 102px)", 
+            overflowY: "scroll",
+            }} className="pt-5 mt-5">
               {allMessages.map((message) => {
                 return (<ChatBlock message={message} key={message.id}/>)
               })}
@@ -111,7 +113,6 @@ const ChatPage = ({ socket }: { socket: Socket }) => {
                 </Form>
               </Col>
             </Row>
-          </Container>
         </div>
       </>
     </Protected>

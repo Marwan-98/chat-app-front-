@@ -34,18 +34,18 @@ function Users({ setLoading }: { setLoading: Function }) {
   }, [])
 
   return (
-    <Col xs={4} className="bg-white text-start" style={{
-      minHeight: "100vh",
-      maxHeight: "100vh",
-      overflowY: "scroll",
-      overflowX: "hidden",
-    }}>
-      <Row>
+    <Col lg={4} xs={12} className="text-start d-lg-block pt-0 mt-0 pt-lg-3 mt-lg-5">
+      <Row className="users-block">
         {users.map((user) => {
           return (
-            <Col xs={12} key={user.id}>
-              <Row>
-                <Col xs={4}>
+            <Col key={user.id} 
+            className="my-lg-1 user"
+            xs={1}
+            lg={12}
+            onClick={() => createConv(user.id, meUser!.id)} 
+            style={{ cursor: "pointer", maxHeight: "100px"}}>
+              <Row lg={6} className="d-flex align-items-center">
+                <Col>
                   <Image
                     src={face}
                     roundedCircle={true}
@@ -53,9 +53,8 @@ function Users({ setLoading }: { setLoading: Function }) {
                     className="my-1"
                   />
                 </Col>
-                <Col xs={8} className="text-start">
+                <Col lg={6} className="text-center d-none d-lg-block">
                   <span>{user.firstName} {user.lastName}</span>
-                  <p style={{ cursor: "pointer" }} onClick={() => createConv(user.id, meUser!.id)}>Chat</p>
                 </Col>
               </Row>
             </Col>
