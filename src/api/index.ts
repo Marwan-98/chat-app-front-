@@ -49,6 +49,7 @@ export const getAllConversations = (email: string, dispatch: Dispatch) => {
             }
         }).then((response) => {
             dispatch(setConversations(response.data));
+            localStorage.setItem("conversations", JSON.stringify(response.data));
         })
     } catch (err) {
         console.log(err)

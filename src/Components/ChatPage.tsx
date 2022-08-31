@@ -1,21 +1,17 @@
 import {
   Button,
-  Container,
   Form,
   Col,
   Row,
+  InputGroup,
 } from "react-bootstrap";
-import bg from "../Assets/bg.jpg";
-import Protected from "./Protected";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { chatMessage, message } from "../types";
+import { message } from "../types";
 import { useEffect, useRef, useState } from "react";
 
 import { Socket } from "socket.io-client";
 import { getAllMessages, saveMessage } from "../api";
-import { useParams } from "react-router";
-import AppNav from "./Chat/AppNav";
 import ChatBlock from "./ChatPage/ChatBlock";
 import { addMessage, setMessages } from "../redux/reducer/conversationsState";
 
@@ -23,13 +19,14 @@ const ChatPage = ({ socket }: { socket: Socket }) => {
 
   const [message, setMessage] = useState("")
 
-  const user = useSelector((state: RootState) => state.user.user);
-  const conversations = useSelector((state: RootState) => state.conversations.conversations);
+  const meUser = useSelector((state: RootState) => state.user.user);
+  const id = useSelector((state: RootState) => state.conversation.id);
+  let conversation = useSelector((state: RootState) => state.conversations.conversations).find(conv => conv.id == id)
   const allMessages = useSelector((state: RootState) => state.conversations.messages);
-  
-  const dispatch = useDispatch();
 
-  const { id } = useParams();
+  console.log(conversation)
+
+  const dispatch = useDispatch();
 
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -43,79 +40,51 @@ const ChatPage = ({ socket }: { socket: Socket }) => {
     saveMessage({ userID: data.message.user.id, body: data.message.body, conversationID: data.id }, dispatch).catch(err => {
       window.location.href = "/login";
     })
-    socket.emit("send_message", {id: data.id, message: data.message});
+    socket.emit("send_message", { id: data.id, message: data.message });
   }
 
-  
-  const joinConversation = (conversation_id: string) => {
-    for (let i = 0; i < conversations.length; i++) {
-      if (conversations[i].id == id!) {
-        const _user = conversations[i].users.find(_user => _user.id === user!.id)
-        if (_user) {
-          socket.emit("join_conversation", (conversation_id).toString())
-        }
-      }
-    }
-  }
-  
   useEffect(() => {
-    joinConversation(id!);
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [allMessages]);
+
+  useEffect(() => {
+    socket.emit("join_conversation", id);
+    console.log(id);
     getAllMessages(+id!, dispatch).then((res) => {
       dispatch(setMessages(res.data))
     })
-    socket.on("recieve_message", (data) => {
-        dispatch(addMessage(data))
-    });
+  }, [id])
+
+  useEffect(() => {
+    socket.on("recieve_message", message => {
+      dispatch(addMessage(message))
+    })
     return () => {
       socket.off("recieve_message")
-      dispatch(setMessages([]))
     }
-  }, [])
-  
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({behavior: 'smooth'});
-  }, [allMessages]);
+  }, [socket])
 
   return (
-    <Protected>
-      <>
-        <AppNav/>
-        <div
-          style={{
-            backgroundSize: "cover",
-            minHeight: "calc(100vh - 48px)",
-          }}
-        >
-            <Row style={{minHeight: "calc(100vh - 102px)", 
-            maxHeight: "calc(100vh - 102px)", 
-            overflowY: "scroll",
-            }} className="pt-5 mt-5">
-              {allMessages.map((message) => {
-                return (<ChatBlock message={message} key={message.id}/>)
-              })}
-            <div ref={bottomRef}/>
-            </Row>
-            <Row className="w-100">
-              <Col>
-                <Form>
-                  <Row>
-                    <Col xs={8} sm={10} lg={11}>
-                      <Form.Group className="mb-3">
-                        <Form.Control type="text" placeholder="Write A Message..." onChange={(e) => setMessage(e.target.value)} />
-                      </Form.Group>
-                    </Col>
-                    <Col xs={4} sm={2} lg={1}>
-                      <Button variant="dark" onClick={message !== "" ? () => sendMessage({ id: Math.random(), body: message, date_created: new Date().toISOString() , user: user! }) : undefined}>
-                        Send
-                      </Button>
-                    </Col>
-                  </Row>
-                </Form>
-              </Col>
-            </Row>
-        </div>
-      </>
-    </Protected>
+    <Col xs={12} lg={8} className="text-start px-4">
+      <Row className="px-4 d-flex flex-row">
+      <h3 style={{ backgroundColor: "#F6F6F8" }}>{conversation?.title ? conversation?.title : conversation?.users.find(user => user.firstName !== meUser?.firstName)!.firstName}</h3>
+      <div className="convos-block">
+        {allMessages.map((message) => {
+          return (<ChatBlock message={message} key={message.id} />)
+        })}
+        <div ref={bottomRef} />
+      </div>
+      <InputGroup className="mb-3">
+        <Form.Control
+          placeholder="Enter Message"
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <Button variant="dark" onClick={message !== "" ? () => sendMessage({ id: Math.random(), body: message, date_created: new Date().toISOString(), user: meUser! }) : undefined}>
+          Send
+        </Button>
+      </InputGroup>
+      </Row>
+    </Col>
   );
 };
 

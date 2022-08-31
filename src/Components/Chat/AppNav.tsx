@@ -9,7 +9,7 @@ function AppNav() {
     const handleShow = () => setShow(true);
 
     return (
-        <Navbar style={{ backgroundColor: "#F8F5F5" }} fixed="top">
+        <Navbar style={{ backgroundColor: "#F8F5F5" }}>
             <Container>
                 <h1>Chat</h1>
                 <Button variant="primary" onClick={() => handleShow()}>
