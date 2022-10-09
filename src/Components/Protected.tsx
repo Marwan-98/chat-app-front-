@@ -1,22 +1,17 @@
-import {useEffect} from "react";
+import { useEffect } from "react";
 
-import {checkLogin} from "../api/index";
+import { checkLogin } from "../api/index";
 
 const Protected: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  useEffect(() => {
+    checkLogin().catch((err) => {
+      if (err) {
+        window.location.href = "/login";
+      }
+    });
+  }, []);
 
-
-	useEffect(() => {
-			checkLogin().then(() => {
-			}).catch((err) => {
-				if(err) {
-					window.location.href = "/login";
-				}
-			})
-	},[])
-
-	return(
-	<>{children}</>
-	)
-}
+  return <>{children}</>;
+};
 
 export default Protected;
