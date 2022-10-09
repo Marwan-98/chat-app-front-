@@ -8,7 +8,7 @@ import Chat from "./Components/Chat";
 import { io } from "socket.io-client";
 
 function App() {
-  const socket = io("http://localhost:2000/");
+  const socket = io("https://chat-server-q4ix.onrender.com");
   return (
     <div className="App">
       <Routes>
