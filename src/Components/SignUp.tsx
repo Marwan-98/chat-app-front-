@@ -5,6 +5,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { getAllConversations, getAllUsers, signUser } from "../api/index";
+import { ToastContainer, toast } from "react-toastify";
 
 import loginImage from "../Assets/login.jpg";
 import { useNavigate } from "react-router";
@@ -30,11 +31,24 @@ function Login() {
       password: Yup.string().required("Password is required"),
     }),
     onSubmit: async (values) => {
-      signUser(values).then(async () => {
-        await getAllUsers(dispatch);
-        await getAllConversations(values.email, dispatch);
-        navigation("/chat");
-      });
+      const alert = toast.loading("Please wait...");
+      signUser(values)
+        .then(async () => {
+          await getAllUsers(dispatch);
+          await getAllConversations(values.email, dispatch);
+        })
+        .then(() => {
+          navigation("/chat");
+        })
+        .catch((err) => {
+          toast.update(alert, {
+            render: `${err.response.data}`,
+            type: "error",
+            isLoading: false,
+            autoClose: 3000,
+          });
+          console.log(err);
+        });
     },
   });
 
@@ -44,8 +58,8 @@ function Login() {
         <Container>
           <h1>Sign up</h1>
         </Container>
-      </Navbar>{" "}
-      <Row style={{ minHeight: "100vh" }}>
+      </Navbar>
+      <Row className="m-0" style={{ minHeight: "100vh" }}>
         <Col
           lg={6}
           className="d-none d-lg-block"
@@ -53,7 +67,7 @@ function Login() {
             backgroundImage: `url('${loginImage}')`,
             backgroundSize: "cover",
           }}
-        ></Col>{" "}
+        ></Col>
         <Col
           lg={6}
           xs={12}
@@ -140,6 +154,7 @@ function Login() {
           </Form>
         </Col>
       </Row>
+      <ToastContainer />
     </>
   );
 }

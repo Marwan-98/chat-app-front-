@@ -15,33 +15,34 @@ export const signUser = async (values: userSign) => {
         password: values.password,
       })
       .then((response) => {
+        console.log(response);
         localStorage.setItem("user", JSON.stringify(response.data.newUser));
         localStorage.setItem("token", response.data.token);
-        localStorage.setItem(
-          "conversations",
-          JSON.stringify(response.data.user.conversations)
-        );
       });
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 
 export const signIn = (email: string, password: string, dispatch: Dispatch) => {
-  return axios
-    .post("https://chat-server-q4ix.onrender.com/user/login", {
-      email,
-      password,
-    })
-    .then((res) => {
-      localStorage.setItem("token", res.data.data);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      localStorage.setItem(
-        "conversations",
-        JSON.stringify(res.data.user.conversations)
-      );
-      dispatch(setUser(res.data.user));
-    });
+  try {
+    return axios
+      .post("https://chat-server-q4ix.onrender.com/user/login", {
+        email,
+        password,
+      })
+      .then((res) => {
+        localStorage.setItem("token", res.data.data);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        localStorage.setItem(
+          "conversations",
+          JSON.stringify(res.data.user.conversations)
+        );
+        dispatch(setUser(res.data.user));
+      });
+  } catch (err) {
+    throw err;
+  }
 };
 
 export const getAllUsers = (dispatch: Dispatch) => {
