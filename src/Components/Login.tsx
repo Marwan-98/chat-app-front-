@@ -51,7 +51,7 @@ function Login() {
     <>
       <Navbar style={{ backgroundColor: "#FFFFFF" }} fixed="top">
         <Container>
-          <h1>Login</h1>
+          <h1 className="fs-3">Login</h1>
         </Container>
       </Navbar>
       <Row className="m-0" style={{ minHeight: "100vh" }}>
